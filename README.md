@@ -1,2 +1,2 @@
 # reservation
-# updating
+Application de réservation de créneau des commerçants.
