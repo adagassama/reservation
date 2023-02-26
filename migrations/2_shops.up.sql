@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS shops (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    service VARCHAR NOT NULL
-);
