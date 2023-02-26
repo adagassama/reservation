@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS roles (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    description VARCHAR NULL
-);
