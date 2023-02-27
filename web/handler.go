@@ -14,8 +14,8 @@ func NewHandler() *Handler {
 
 	handler.Get("/", handler.WebShowShops())
 	handler.Get("/create-shop", handler.WebCreateShopForm())
-	handler.Get("/connexion", handler.WebCreateConnexionForm())
-	/*handler.Get("/create-account", handler.WebCreateAccountForm())*/
+	handler.Get("/connexion", handler.ConnexionForm())
+	handler.Get("/create-account", handler.RegisterForm())
 
 	handler.Route("/api", func(r chi.Router) {
 		//r.Post("/", handler.AddCreateAccount())
