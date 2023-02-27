@@ -45,11 +45,27 @@ func (h *Handler) WebCreateShopForm() http.HandlerFunc {
 	}
 }
 
-func (h *Handler) WebCreateConnexionForm() http.HandlerFunc {
+func (h *Handler) ConnexionForm() http.HandlerFunc {
 	data := TemplateData{Titre: "Add a connexion"}
 
 	return func(writer http.ResponseWriter, request *http.Request) {
-		tmpl, err := template.ParseFiles("templates/layout.gohtml", "templates/connexion.gohtml")
+		tmpl, err := template.ParseFiles("templates/layout.gohtml", "templates/login.gohtml")
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+
+		err = tmpl.ExecuteTemplate(writer, "layout", data)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+		}
+	}
+}
+
+func (h *Handler) RegisterForm() http.HandlerFunc {
+	data := TemplateData{Titre: "Add a create"}
+
+	return func(writer http.ResponseWriter, request *http.Request) {
+		tmpl, err := template.ParseFiles("templates/layout.gohtml", "templates/register.gohtml")
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
