@@ -1,18 +1,44 @@
 package main
 
 import (
-	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
-	"reservation/web"
 )
 
 func main() {
 
-	mux := web.NewHandler()
+	router := gin.Default()
+	router.LoadHTMLGlob("templates/*")
 
-	err := http.ListenAndServe(":2020", mux)
-	if err != nil {
-		_ = fmt.Errorf("impossible de lancer le serveur : %w", err)
-		return
-	}
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.gohtml", gin.H{
+			"title": "Tintidale",
+		})
+	})
+	router.GET("/connexion", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "login.gohtml", gin.H{
+			"title": "Connexion",
+		})
+	})
+	router.GET("/create-account", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "register.gohtml", gin.H{
+			"title": "Register",
+		})
+	})
+	router.GET("/create-shop", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "createShop.gohtml", gin.H{
+			"title": "Register",
+		})
+	})
+	router.GET("/dashboard", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "dashboard.gohtml", gin.H{
+			"title": "Dashboard",
+		})
+	})
+	router.GET("/booking", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "booking.html", gin.H{
+			"title": "Booking",
+		})
+	})
+	router.Run(":2020")
 }
