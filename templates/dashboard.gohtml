@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .title }}</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="/static/dashboard.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -20,62 +20,57 @@
             <table class="table table-responsive table-borderless">
                 <thead>
                 <tr class="bg-light">
-                    <th scope="col" width="5%"><input class="form-check-input" type="checkbox"></th>
                     <th scope="col" width="5%">#</th>
-                    <th scope="col" width="20%">Date</th>
-                    <th scope="col" width="10%">Status</th>
-                    <th scope="col" width="20%">Customer</th>
-                    <th scope="col" width="20%">Purchased</th>
-                    <th scope="col" class="text-end" width="20%"><span>Revenue</span></th>
+                    <th scope="col" width="20%">Nom & Prénom</th>
+                    <th scope="col" width="10%">Boutique</th>
+                    <th scope="col" width="20%">Reservation</th>
+                    <th scope="col" width="20%">Contact</th>
+                    <th scope="col" width="10%">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                    <td>12</td>
-                    <td>1 Oct, 21</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
-                    <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Althan Travis</td>
-                    <td>Wirecard for figma</td>
-                    <td class="text-end"><span class="fw-bolder">$0.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    <td>1</td>
+                    <td>
+                        <img src="https://i.imgur.com/VKOeFyS.png" width="25">
+                        Diallo Djaraye
+                    </td>
+                    <td><span class="ms-1">BabyShop</span></td>
+                    <td>11h 00 - 12h 00 12/11/2023</td>
+                    <td>0788899009 / djaraye@gmail.fr</td>
+                    <td class="d-flex gap-3">
+                        <a href="#"><i class="bi bi-pencil-square"></i></a>
+                        <a href="#"><i class="bi bi-trash3"></i></a>
+                    </td>
                 </tr>
 
                 <tr>
-                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                    <td>14</td>
-                    <td>12 Oct, 21</td>
-                    <td><i class="fa fa-dot-circle-o text-danger"></i><span class="ms-1">Failed</span></td>
-                    <td><img src="https://i.imgur.com/nmnmfGv.png" width="25"> Tomo arvis</td>
-                    <td>Altroz furry</td>
-                    <td class="text-end"><span class="fw-bolder">$0.19</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
-                </tr>
-
-                <tr>
-                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                    <td>17</td>
-                    <td>1 Nov, 21</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
-                    <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Althan Travis</td>
-                    <td>Apple Macbook air</td>
-                    <td class="text-end"><span class="fw-bolder">$1.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    <td>2</td>
+                    <td>
+                        <img src="https://i.imgur.com/VKOeFyS.png" width="25">
+                        Diallo Djaraye
+                    </td>
+                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">BabyShop</span></td>
+                    <td>11h 00 - 12h 00 12/11/2023</td>
+                    <td>0788899009 / djaraye@gmail.fr</td>
+                    <td class="d-flex gap-3">
+                        <a href="#"><i class="bi bi-pencil-square"></i></a>
+                        <a href="#"><i class="bi bi-trash3"></i></a>
+                    </td>
                 </tr>
                 <tr>
-                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                    <td>90</td>
-                    <td>19 Oct, 21</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
-                    <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Travis head</td>
-                    <td>Apple Macbook Pro</td>
-                    <td class="text-end"><span class="fw-bolder">$9.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
-                </tr>
-                <tr>
-                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                    <td>12</td>
-                    <td>1 Oct, 21</td>
-                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
-                    <td><img src="https://i.imgur.com/nmnmfGv.png" width="25"> Althan Travis</td>
-                    <td>Wirecard for figma</td>
-                    <td class="text-end"><span class="fw-bolder">$0.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    <td>3</td>
+                    <td>
+                        <img src="https://i.imgur.com/VKOeFyS.png" width="25">
+                        Diallo Djaraye
+                    </td>
+                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">BabyShop</span></td>
+                    <td>11h 00 - 12h 00 12/11/2023</td>
+                    <td>0788899009 / djaraye@gmail.fr</td>
+                    <td class="d-flex gap-3">
+                        <a href="#"><i class="bi bi-pencil-square"></i></a>
+                        <a href="#"><i class="bi bi-trash3"></i></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
