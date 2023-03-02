@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .title }}</title>
-    <link rel="stylesheet" href="booking.css">
+    <link rel="stylesheet" href="/static/booking.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.css">
@@ -20,18 +20,18 @@
 </head>
 <body>
 {{template "navigation" }}
-<div class="container py-5">
-    <div class="container-fluid px-0 px-sm-4 mx-auto">
+<div class="container py-5 px-sm-4 mx-auto">
         <div class="row justify-content-center mx-0">
             <div class="col-lg-10">
-                <div class="card shadow border-0">
+                <div class="card border-0">
                     <form autocomplete="off">
                         <div class="card-header bg-dark">
-                            <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
-                                <input type="text" id="dp1" class="datepicker" placeholder="Pick Date" name="date" readonly><span class="fa fa-calendar"></span>
+                            <div class="mx-0 mb-0 box-calendar d-flex gap-3 px-1">
+                                <input type="text" id="dp1" class="datepicker" placeholder="Choisir un creneau" name="date" readonly>
+                                <span class="calendar"><i class="bi bi-calendar2-date-fill"></i></span>
                             </div>
                         </div>
-                        <div class="card-body p-3 p-sm-5">
+                        <div class="card-body pt-3 pt-sm-3">
                             <div class="row text-center mx-0">
                                 <div class="col-md-2 col-4 my-1 px-2"><div class="cell py-1">9:00AM</div></div>
                                 <div class="col-md-2 col-4 my-1 px-2"><div class="cell py-1">9:30AM</div></div>
@@ -62,13 +62,17 @@
                                 <div class="col-md-2 col-4 my-1 px-2"><div class="cell py-1">4:15PM</div></div>
                                 <div class="col-md-2 col-4 my-1 px-2"><div class="cell py-1">5:00PM</div></div>
                             </div>
+                            <div class="row text-center mt-3 d-flex justify-content-center">
+                                <div class="col-md-5 col-4">
+                                    <a class="btn btn-primary w-100" href="/connexion">Reserver</a>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="booking.js"></script>
+<script src="/static/booking.js"></script>
 </body>
 </html>

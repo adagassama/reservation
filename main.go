@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"log"
 	"net/http"
 	"time"
@@ -71,6 +73,8 @@ func main() {
 	}
 
 	router := gin.Default()
+	store := cookie.NewStore([]byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
 
 	router.POST("/register", Register)
 	router.POST("/login", Login)
@@ -78,22 +82,30 @@ func main() {
 	router.POST("/slots", CreateSlot)
 	router.POST("/appointments", CreateAppointment)
 	router.GET("/appointments", GetAppointments)
+	router.GET("/", GetShops)
 
 	router.LoadHTMLGlob("templates/*")
+	router.Static("/static", "./static")
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.gohtml", gin.H{
-			"title": "Tintidale",
-		})
-	})
-	router.GET("/connexion", func(c *gin.Context) {
+	router.GET("/login", func(c *gin.Context) {
+		session := sessions.Default(c)
+		errMsg := session.Get("errMsg")
+		session.Delete("errMsg")
+		session.Save()
 		c.HTML(http.StatusOK, "login.gohtml", gin.H{
-			"title": "Connexion",
+			"title":  "Connexion",
+			"errMsg": errMsg,
 		})
 	})
-	router.GET("/create-account", func(c *gin.Context) {
+	router.GET("/register", func(c *gin.Context) {
+		session := sessions.Default(c)
+		errMsg := session.Get("errMsg")
+		session.Delete("errMsg")
+		session.Save()
+
 		c.HTML(http.StatusOK, "register.gohtml", gin.H{
-			"title": "Register",
+			"title":  "Register",
+			"errMsg": errMsg,
 		})
 	})
 	router.GET("/create-shop", func(c *gin.Context) {
@@ -111,6 +123,7 @@ func main() {
 			"title": "Booking",
 		})
 	})
+
 	router.Run(":2020")
 }
 
@@ -124,21 +137,17 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error hashing password"})
 		return
 	}
-	fmt.Println("Password Haché:", hashedPassword)
 
 	_, err = db.Exec("INSERT INTO users (email, password) VALUES (?, ?)", user.Email, hashedPassword)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error creating user en GOOO"})
+		session := sessions.Default(c)
+		session.Set("errMsg", "Erreur de création d'utilisateur")
+		session.Save()
+		c.Redirect(http.StatusSeeOther, "/register")
 		return
 	}
 
-	/*userID, err := result.LastInsertId()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error getting user ID"})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"userID": userID})*/
-	c.Redirect(http.StatusFound, "/connexion")
+	c.Redirect(http.StatusFound, "/login")
 }
 
 func Login(c *gin.Context) {
@@ -148,17 +157,23 @@ func Login(c *gin.Context) {
 
 	var storedPassword string
 	err := db.QueryRow("SELECT password FROM users WHERE email = ?", user.Email).Scan(&storedPassword)
+
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error2": "invalid credentials"})
+		session := sessions.Default(c)
+		session.Set("errMsg", "Votre e-mail ou mot de passe est incorrect.")
+		session.Save()
+		c.Redirect(http.StatusSeeOther, "/login")
 		return
 	}
 
 	if err = bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(user.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error3": "invalid credentials"})
+		session := sessions.Default(c)
+		session.Set("errMsg", "Votre e-mail ou mot de passe est incorrect.")
+		session.Save()
+		c.Redirect(http.StatusSeeOther, "/login")
 		return
 	}
-	//c.JSON(http.StatusOK, gin.H{"message": "login successful"})
-	c.Redirect(http.StatusFound, "/dashboard")
+	c.Redirect(http.StatusSeeOther, "/dashboard")
 }
 
 func CreateShop(c *gin.Context) {
@@ -279,4 +294,26 @@ func GetAppointments(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, appointments)*/
+}
+func GetShops(c *gin.Context) {
+	rows, err := db.Query("SELECT * FROM shops")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	// Stockage des données dans un slice de `Shop`
+	var shops []Shop
+	for rows.Next() {
+		var shop Shop
+		err := rows.Scan(&shop.ID, &shop.Name, &shop.Address)
+		if err != nil {
+			log.Fatal(err)
+		}
+		shops = append(shops, shop)
+	}
+	fmt.Println(shops)
+	c.HTML(http.StatusOK, "index.gohtml", gin.H{
+		"title": "Tintidale",
+		"shops": shops,
+	})
 }
