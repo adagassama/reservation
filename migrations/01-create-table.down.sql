@@ -1,4 +1,0 @@
-DROP TABLE Shops;
-DROP TABLE Users;
-DROP TABLE Bookings;
-DROP TABLE Slots;

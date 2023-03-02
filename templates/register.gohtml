@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="card my-3">
-                    <form class="card-body cardbody-color p-lg-3" action="">
+                    <form class="card-body cardbody-color p-lg-3" action="/register" method="post">
                         <div class="text-center">
                             <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-1"
                                  width="150px" alt="profile" />
@@ -26,17 +26,15 @@
                         <h3 class="text-center text-dark mb-3">Nouveau sur Tintidale ?</h3>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Téléphone portable *</label>
-                            <input type="number" class="form-control" id="phoneNumber"
-                                   placeholder="Entrer votre numéro...">
+                            <input type="number" class="form-control" id="phoneNumber" name="contact" placeholder="Entrer votre numéro...">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email *</label>
-                            <input type="email" class="form-control" id="AddressEmail" aria-describedby="emailHelp"
-                                   placeholder="Email">
+                            <input type="email" class="form-control" id="AddressEmail" aria-describedby="emailHelp" name="email" placeholder="Email">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de passe *</label>
-                            <input type="password" class="form-control" id="password" placeholder="Mot de passe">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status *</label>
