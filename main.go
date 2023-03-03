@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ import (
 )
 
 var db *sql.DB
+var jwtKey = []byte("3EDC&edc")
 
 func main() {
 	var err error
@@ -48,7 +50,6 @@ func main() {
 	router := gin.Default()
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
-
 	router.POST("/register", Register)
 	router.POST("/login", Login)
 	router.POST("/shops", CreateShop)
@@ -67,7 +68,7 @@ func main() {
 			"title": "Register",
 		})
 	})
-	router.GET("/dashboard", func(c *gin.Context) {
+	router.GET("/dashboard", AuthMiddleware(), func(c *gin.Context) {
 		c.HTML(http.StatusOK, "dashboard.gohtml", gin.H{
 			"title": "Dashboard",
 		})
@@ -152,8 +153,52 @@ func Login(c *gin.Context) {
 		c.Redirect(http.StatusSeeOther, "/login")
 		return
 	}
+	// Création du token JWT
+	expirationTime := time.Now().Add(24 * time.Hour)
+	claims := &jwt.StandardClaims{
+		ExpiresAt: expirationTime.Unix(),
+		IssuedAt:  time.Now().Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Signer le token avec la clé secrète
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
+		return
+	}
+	// Stocker le token dans le local storage du navigateur
+	c.SetCookie("gass", tokenString, 86400, "/", "localhost", false, true)
+
 	c.Redirect(http.StatusSeeOther, "/dashboard")
 }
+
+func AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token, err := c.Cookie("gass")
+		fmt.Println(token)
+
+		if err != nil {
+			c.Redirect(http.StatusSeeOther, "/login")
+			c.Abort()
+			return
+		}
+
+		claims := jwt.MapClaims{}
+		_, err = jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte("3EDC&edc"), nil
+		})
+
+		if err != nil {
+			c.Redirect(http.StatusSeeOther, "/login")
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func CreateShop(c *gin.Context) {
 	var shop models.Shop
 	shop.Name = c.PostForm("nameshop")
@@ -261,17 +306,6 @@ func GetAppointments(c *gin.Context) {
 	defer rows.Close()
 	c.JSON(http.StatusOK, " GOOD ")
 
-	/*appointments := []Appointments{}
-	for rows.Next() {
-		var appointment AppointmentDetails
-		if err := rows.Scan(&appointment.ID, &appointment.ShopName, &appointment.ShopAddress, &appointment.StartTime, &appointment.EndTime); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error scanning appointment"})
-			return
-		}
-		appointments = append(appointments, appointment)
-	}
-
-	c.JSON(http.StatusOK, appointments)*/
 }
 func GetShops(c *gin.Context) {
 	rows, err := db.Query("SELECT * FROM shops")
