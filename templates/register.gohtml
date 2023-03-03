@@ -25,6 +25,14 @@
                         </div>
                         <h3 class="text-center text-dark mb-3">Nouveau sur Tintidale ?</h3>
                         <div class="mb-3">
+                            <label for="firstname" class="form-label">Prénom *</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Entrer votre prénom...">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Nom *</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Entrer votre nom...">
+                        </div>
+                        <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Téléphone portable *</label>
                             <input type="number" class="form-control" id="phoneNumber" name="contact" placeholder="Entrer votre numéro..." required>
                             <div id="phoneNumber" class="invalid-feedback">{{ .errMsg }}</div>
@@ -42,13 +50,13 @@
                         <div class="mb-3">
                             <label class="form-label">Status *</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="status" id="status1">
+                                <input class="form-check-input" type="radio" name="status" id="status1" value="Commerçant">
                                 <label class="form-check-label" for="status1">
                                     Commerçant
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="status" id="status2" checked>
+                                <input class="form-check-input" type="radio" name="status" id="status2" value="Utilisateur" checked>
                                 <label class="form-check-label" for="status2">
                                     Utilisateur
                                 </label>

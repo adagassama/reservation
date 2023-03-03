@@ -28,7 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// create tables if they don't exist
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(50) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL)")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, firstname VARCHAR(100) NOT NULL, lastname VARCHAR(100) NOT NULL, contact VARCHAR(20) NOT NULL, email VARCHAR(50) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL, status VARCHAR(100) NOT NULL)")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,8 +104,12 @@ func GetSessionErrorMsg1(c *gin.Context) {
 }
 func Register(c *gin.Context) {
 	var user models.User
+	user.Firstname = c.PostForm("firstname")
+	user.Lastname = c.PostForm("lastname")
+	user.Contact = c.PostForm("contact")
 	user.Email = c.PostForm("email")
 	user.Password = c.PostForm("password")
+	user.Status = c.PostForm("status")
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -113,7 +117,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	_, err = db.Exec("INSERT INTO users (email, password) VALUES (?, ?)", user.Email, hashedPassword)
+	_, err = db.Exec("INSERT INTO users (firstname, lastname, contact, email, password, status) VALUES (?, ?, ?, ?, ?, ?)", user.Firstname, user.Lastname, user.Contact, user.Email, hashedPassword, user.Status)
 	if err != nil {
 		session := sessions.Default(c)
 		session.Set("errMsg", "Erreur de création d'utilisateur")
