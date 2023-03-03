@@ -5,41 +5,14 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
-	"log"
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
+	"log"
+	"net/http"
+	"reservation/models"
+	"time"
 )
-
-type User struct {
-	ID       int    `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type Shop struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Address string `json:"address"`
-}
-
-type Slot struct {
-	ID        int       `json:"id"`
-	ShopID    int       `json:"shopId"`
-	StartTime time.Time `json:"startTime"`
-	EndTime   time.Time `json:"endTime"`
-}
-
-type Appointment struct {
-	ID        int       `json:"id"`
-	UserID    int       `json:"userId"`
-	SlotID    int       `json:"slotId"`
-	StartTime time.Time `json:"startTime"`
-	EndTime   time.Time `json:"endTime"`
-}
 
 var db *sql.DB
 
@@ -87,27 +60,8 @@ func main() {
 	router.LoadHTMLGlob("templates/*")
 	router.Static("/static", "./static")
 
-	router.GET("/login", func(c *gin.Context) {
-		session := sessions.Default(c)
-		errMsg := session.Get("errMsg")
-		session.Delete("errMsg")
-		session.Save()
-		c.HTML(http.StatusOK, "login.gohtml", gin.H{
-			"title":  "Connexion",
-			"errMsg": errMsg,
-		})
-	})
-	router.GET("/register", func(c *gin.Context) {
-		session := sessions.Default(c)
-		errMsg := session.Get("errMsg")
-		session.Delete("errMsg")
-		session.Save()
-
-		c.HTML(http.StatusOK, "register.gohtml", gin.H{
-			"title":  "Register",
-			"errMsg": errMsg,
-		})
-	})
+	router.GET("/login", GetSessionErrorMsg)
+	router.GET("/register", GetSessionErrorMsg1)
 	router.GET("/create-shop", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "createShop.gohtml", gin.H{
 			"title": "Register",
@@ -126,9 +80,30 @@ func main() {
 
 	router.Run(":2020")
 }
+func GetSessionErrorMsg(c *gin.Context) {
+	session := sessions.Default(c)
+	errMsg := session.Get("errMsg")
+	session.Delete("errMsg")
+	session.Save()
+	c.HTML(http.StatusOK, "login.gohtml", gin.H{
+		"title":  "Connexion",
+		"errMsg": errMsg,
+	})
+}
 
+func GetSessionErrorMsg1(c *gin.Context) {
+	session := sessions.Default(c)
+	errMsg := session.Get("errMsg")
+	session.Delete("errMsg")
+	session.Save()
+
+	c.HTML(http.StatusOK, "register.gohtml", gin.H{
+		"title":  "Register",
+		"errMsg": errMsg,
+	})
+}
 func Register(c *gin.Context) {
-	var user User
+	var user models.User
 	user.Email = c.PostForm("email")
 	user.Password = c.PostForm("password")
 
@@ -151,7 +126,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var user User
+	var user models.User
 	user.Email = c.PostForm("email")
 	user.Password = c.PostForm("password")
 
@@ -175,9 +150,8 @@ func Login(c *gin.Context) {
 	}
 	c.Redirect(http.StatusSeeOther, "/dashboard")
 }
-
 func CreateShop(c *gin.Context) {
-	var shop Shop
+	var shop models.Shop
 	shop.Name = c.PostForm("nameshop")
 	shop.Address = c.PostForm("address")
 
@@ -191,7 +165,7 @@ func CreateShop(c *gin.Context) {
 }
 
 func CreateSlot(c *gin.Context) {
-	var slot Slot
+	var slot models.Slot
 	if err := c.ShouldBindJSON(&slot); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -229,7 +203,7 @@ func CreateSlot(c *gin.Context) {
 }
 
 func CreateAppointment(c *gin.Context) {
-	var appointment Appointment
+	var appointment models.Appointment
 	if err := c.ShouldBindJSON(&appointment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -302,9 +276,9 @@ func GetShops(c *gin.Context) {
 	}
 	defer rows.Close()
 	// Stockage des données dans un slice de `Shop`
-	var shops []Shop
+	var shops []models.Shop
 	for rows.Next() {
-		var shop Shop
+		var shop models.Shop
 		err := rows.Scan(&shop.ID, &shop.Name, &shop.Address)
 		if err != nil {
 			log.Fatal(err)
